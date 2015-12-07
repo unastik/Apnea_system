@@ -400,5 +400,5 @@
                 Serial.write((byte)((data)>>24));
                 Serial.write((byte)((data)>>16));
                 Serial.write((byte)((data)>>8));
-                Serial.write((byte)(0x00);
+                Serial.write((byte)(0x00));
             }
