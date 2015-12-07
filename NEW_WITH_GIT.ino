@@ -1,5 +1,5 @@
 /*=======================================================================
-    Project             :       Sleep Apnea Detection Device System sdfdf
+    Project             :       Sleep Apnea Detection Device System
     Developer           :       Nitikorn Srisrisawang
     Version             :       xxxxxxxxxx
     Last modified date  :       xx/xx/xxxx
@@ -82,7 +82,10 @@
             } dataPackage;
             dataPackage rawData[BUFFERSIZESLOW];
 
-            S_ADS1115_Apn analog;
+            //S_ADS1115_Apn analog;
+            #define THERMISTOR_PIN 53
+            #define THORAX_PIN     54
+            #define ABDO_PIN       55
             bool nasalExist = false, spo2Exist = false, analogExist = false, eeg1Exist = false, eeg2Exist = false;
 
         //-------------------------Thread and interrupt implement------------------------------------------------
@@ -122,7 +125,7 @@
             void sensorInit()
             {
                 nasalExist = false;
-                analogExist = false;
+                //analogExist = false;
                 spo2Exist = false;
                 eeg1Exist = false;
                 eeg2Exist = false;
@@ -133,12 +136,13 @@
                         Serial.println("Nasal cannula module initialized.");
                 }
 
-                if(analog.begin(ADS1115_ADDR_GND))
+                /*if(analog.begin(ADS1115_ADDR_GND))
                 {
                     analogExist = true;
                     if(verbose)
                         Serial.println("Analog module initialized.");
-                }
+                }*/
+                analogExist = true;
 
                 if(spo2.begin(SPO2_SPISTE_PIN, SPO2_ADCRDY_PIN, SPO2_ADCRST_PIN))
                 {
@@ -226,11 +230,11 @@
             void analogAcquire()
             {
                 if(analogExist){
-                    rawData[0].thermistData = (int16_t)analog.read(2);
+                    rawData[0].thermistData = (int16_t)analogRead(THERMISTOR_PIN);
                     delayMicroseconds(350);
-                    rawData[0].thoraxData = (int16_t)analog.read(1);
+                    rawData[0].thoraxData = (int16_t)analogRead(THORAX_PIN);
                     delayMicroseconds(350);
-                    rawData[0].abdoData = (int16_t)analog.read(0);
+                    rawData[0].abdoData = (int16_t)analogRead(ABDO_PIN);
                 }else{
                     rawData[0].thermistData = 0;
                     rawData[0].thoraxData = 0;
