@@ -106,7 +106,7 @@ class S_AFE4490_Apn
 {
 	SPISettings settingsSpO2;
 public:
-	bool begin(uint8_t spiste, uint8_t adc_rdy, uint8_t adc_rst);
+	bool begin(uint8_t spiste, uint8_t adc_rdy);
 	void read(afe4490Package* DATA);
 	void printData(afe4490Package* DATA);
 	S_AFE4490_Apn() : settingsSpO2(4000000, MSBFIRST, SPI_MODE0){};
@@ -124,7 +124,7 @@ private:
 protected:
 	uint8_t _SPISTE;
 	uint8_t _ADC_RDY;
-	uint8_t _ADC_RST;
+	//uint8_t _ADC_RST;
 };
 
 #endif

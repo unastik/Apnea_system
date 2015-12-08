@@ -53,7 +53,7 @@
             //#define SPO2_CYCLE 500
             #define SPO2_SPISTE_PIN 10
             #define SPO2_ADCRDY_PIN 9
-            #define SPO2_ADCRST_PIN 7
+            //#define SPO2_ADCRST_PIN 7
             afe4490Package spo2pack;
 
             typedef struct _spo2data
@@ -65,11 +65,11 @@
 
             //uint8_t CS, uint8_t DRDY, uint8_t PWDN, uint8_t RESET, uint8_t START
             S_ADS1299_Apn eeg1,eeg2;
-            #define EEG1_CS_PIN     40
-            #define EEG1_DRDY_PIN   42
+            #define EEG1_CS_PIN     42
+            #define EEG1_DRDY_PIN   40
 
-            #define EEG2_CS_PIN     41
-            #define EEG2_DRDY_PIN   43
+            #define EEG2_CS_PIN     43
+            #define EEG2_DRDY_PIN   41
             ads1299Package eeg1pack[BUFFERSIZEFAST], eeg2pack[BUFFERSIZEFAST],zeroEEG;
 
             typedef struct _data
@@ -140,7 +140,7 @@
                         Serial.println("Analog module initialized.");
                 }
 
-                if(spo2.begin(SPO2_SPISTE_PIN, SPO2_ADCRDY_PIN, SPO2_ADCRST_PIN))
+                if(spo2.begin(SPO2_SPISTE_PIN, SPO2_ADCRDY_PIN))
                 {
                     spo2Exist = true;
                     //delay(5000);
@@ -231,6 +231,7 @@
                     rawData[0].thoraxData = (int16_t)analog.read(1);
                     delayMicroseconds(350);
                     rawData[0].abdoData = (int16_t)analog.read(0);
+                    //Serial1.write('E');
                 }else{
                     rawData[0].thermistData = 0;
                     rawData[0].thoraxData = 0;
@@ -247,15 +248,17 @@
                         spo2Data[0].IRData = spo2pack.data_IR;
                         spo2Data[0].REDData = spo2pack.data_RED;
                         spo2.cnt = 0;
+                        //Serial1.write('S');
                     }
                 }else{
                     spo2Data[0].IRData = 0;
                     spo2Data[0].REDData = 0;
-                }
+                }//Serial1.write('S');
                 for(buffernumber = BUFFERSIZEFAST-2; buffernumber >= 0; buffernumber--){
                     spo2Data[buffernumber+1] = spo2Data[buffernumber];
                     //Serial1.write('S');
                 }
+                //Serial1.write('E');
             }
             void biosignal1Acquire()
             {
@@ -280,7 +283,7 @@
                     eeg2pack[0].samplingNum++;
                 }else{
                     eeg2pack[0] = zeroEEG;
-                }
+                }//Serial1.write('K');
                 for(buffernumber = BUFFERSIZEFAST-2; buffernumber >= 0; buffernumber--){
                     eeg2pack[buffernumber+1] = eeg2pack[buffernumber];
                     //Serial1.println("SHITFT2");
@@ -396,5 +399,5 @@
                 Serial.write((byte)((data)>>24));
                 Serial.write((byte)((data)>>16));
                 Serial.write((byte)((data)>>8));
-                Serial.write((byte)(0x00);
+                Serial.write((byte)(0x00));
             }

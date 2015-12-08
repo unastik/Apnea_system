@@ -2,15 +2,15 @@
 
 #include <SPI.h>
 
-	bool S_AFE4490_Apn::begin(uint8_t spiste, uint8_t adc_rdy, uint8_t adc_rst)
+	bool S_AFE4490_Apn::begin(uint8_t spiste, uint8_t adc_rdy)
 	{
 		_SPISTE = spiste;
 		_ADC_RDY = adc_rdy;
-		_ADC_RST = adc_rst;
+		//_ADC_RST = adc_rst;
 
 		pinMode (_SPISTE,    OUTPUT);
 		pinMode (_ADC_RDY,   INPUT);
-    	pinMode (_ADC_RST, INPUT);
+    	//pinMode (_ADC_RST, INPUT);
 
     	SPI.begin();
     	SPI.beginTransaction(settingsSpO2);
@@ -111,7 +111,7 @@
 	    SPI.transfer ((data >>  8) & 0xFF);
 	    SPI.transfer (data & 0xFF);
 	    digitalWrite (_SPISTE, HIGH);
-		//SPI.endTransaction();
+		SPI.endTransaction();
 	}
 
 	uint32_t S_AFE4490_Apn::AFE4490_Read (uint8_t address)
